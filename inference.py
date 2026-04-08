@@ -12,6 +12,9 @@ API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
 HF_TOKEN = os.getenv("HF_TOKEN")
 BENCHMARK = "openenv_email_triage"
+SCORE_EPSILON = 0.0001
+MIN_TASK_SCORE = SCORE_EPSILON
+MAX_TASK_SCORE = 1.0 - SCORE_EPSILON
 
 MAX_TOKENS = 220
 TEMPERATURE = 0.0
@@ -39,7 +42,7 @@ def log_step(step: int, action: str, reward: float, done: bool, error: Optional[
 def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
     reward_text = ",".join(f"{r:.2f}" for r in rewards)
     print(
-        f"[END] success={str(success).lower()} steps={steps} score={score:.2f} rewards={reward_text}",
+        f"[END] success={str(success).lower()} steps={steps} score={score:.4f} rewards={reward_text}",
         flush=True,
     )
 
@@ -220,7 +223,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
     env = EmailTriageEnv(task_name=task_name)
     rewards: List[float] = []
     steps = 0
-    score = 0.0001
+    score = MIN_TASK_SCORE
     success = False
 
     log_start(task=task_name, env=BENCHMARK, model=MODEL_NAME)
@@ -241,7 +244,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
 
         current_state = env.state()
         score = float(current_state.final_score)
-        score = max(0.0001, min(0.9999, score))
+        score = max(MIN_TASK_SCORE, min(MAX_TASK_SCORE, score))
         success = score >= 0.8
     finally:
         env.close()
