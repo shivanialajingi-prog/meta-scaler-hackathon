@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import Body, FastAPI
 from pydantic import BaseModel
 
 from .environment import EmailTriageEnv
@@ -40,8 +40,9 @@ def health() -> dict:
 
 
 @app.post("/reset")
-def reset(payload: ResetRequest) -> dict:
-    _env.set_task(payload.task_name)
+def reset(payload: ResetRequest | None = Body(default=None)) -> dict:
+    task_name = payload.task_name if payload else "easy_email_triage"
+    _env.set_task(task_name)
     obs = _env.reset()
     return {"observation": obs.model_dump(), "done": False}
 
