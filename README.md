@@ -1,3 +1,12 @@
+---
+title: Meta Scalar Hackathon
+emoji: 📬
+colorFrom: blue
+colorTo: cyan
+sdk: docker
+pinned: false
+---
+
 # OpenEnv Email Triage Environment
 
 ## Problem Description
