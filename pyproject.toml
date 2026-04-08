@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openenv-email-triage"
+version = "0.1.0"
+description = "Deterministic OpenEnv email triage environment"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pydantic>=2.7.0",
+  "fastapi>=0.111.0",
+  "uvicorn[standard]>=0.30.0",
+  "openai>=1.40.0",
+  "openenv-core>=0.1.0",
+]
+
+[tool.setuptools]
+packages = ["env"]
+
+[project.scripts]
+server = "server.app:main"

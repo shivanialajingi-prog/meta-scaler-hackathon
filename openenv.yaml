@@ -1,0 +1,9 @@
+name: openenv-email-triage
+version: 0.1.0
+description: Deterministic real-world email triage workflow environment with SLA-driven prioritization and multi-step operations.
+entrypoint: env.environment:EmailTriageEnv
+tags:
+  - openenv
+  - rl-environment
+  - workflow-automation
+  - email-triage
