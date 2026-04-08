@@ -220,7 +220,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
     env = EmailTriageEnv(task_name=task_name)
     rewards: List[float] = []
     steps = 0
-    score = 0.0
+    score = 0.0001
     success = False
 
     log_start(task=task_name, env=BENCHMARK, model=MODEL_NAME)
@@ -241,6 +241,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
 
         current_state = env.state()
         score = float(current_state.final_score)
+        score = max(0.0001, min(0.9999, score))
         success = score >= 0.8
     finally:
         env.close()

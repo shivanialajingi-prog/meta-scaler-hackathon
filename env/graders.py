@@ -4,6 +4,8 @@ from typing import Dict, Iterable
 
 from .models import State, TaskSpec
 
+_SCORE_EPSILON = 0.0001
+
 
 def _fraction_match(required: Dict[str, str], observed: Dict[str, str]) -> float:
     if not required:
@@ -68,5 +70,7 @@ def grade_task(task: TaskSpec, state: State) -> float:
     )
 
     efficiency_penalty = min(0.20, (state.invalid_actions * 0.03) + (state.loop_actions * 0.02) + (state.noop_actions * 0.01))
-    score = max(0.0, min(1.0, weighted_score - efficiency_penalty))
+    raw_score = weighted_score - efficiency_penalty
+    # Keep task scores strictly inside (0, 1) to satisfy evaluator constraints.
+    score = max(_SCORE_EPSILON, min(1.0 - _SCORE_EPSILON, raw_score))
     return float(round(score, 4))
