@@ -50,7 +50,7 @@ class EmailTriageEnv:
             noop_actions=0,
             wasted_steps=0,
             cumulative_reward=0.0,
-            final_score=0.0,
+            final_score=0.0001,
             last_action_error=None,
         )
         return self._build_observation()

@@ -115,5 +115,5 @@ class State(BaseModel):
     noop_actions: int
     wasted_steps: int
     cumulative_reward: float
-    final_score: float = 0.0
+    final_score: float = Field(default=0.0001, gt=0.0, lt=1.0)
     last_action_error: Optional[str] = None
