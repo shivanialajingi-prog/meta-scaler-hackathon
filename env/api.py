@@ -19,6 +19,21 @@ class StepRequest(BaseModel):
     action: Action
 
 
+@app.get("/")
+def root() -> dict:
+    return {
+        "name": "OpenEnv Email Triage API",
+        "status": "ok",
+        "docs": "/docs",
+        "health": "/health",
+        "endpoints": {
+            "reset": "POST /reset",
+            "step": "POST /step",
+            "state": "GET /state",
+        },
+    }
+
+
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok", "tasks": TASK_NAMES}
